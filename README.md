@@ -169,7 +169,7 @@ NPBの現行シーズンにおける打撃成績データを使用（50打席以
 
 ## 補遺
 
-本サイト名 "Shall We Bunt?" は、[1954年11月18日にニューヨーク・タイムズ誌に掲載されたコラムの一節]("https://www.nytimes.com/1954/11/18/archives/sports-of-the-times-thats-telling-em-buster.html")に由来する。
+本サイト名 "Shall We Bunt?" は、[1954年11月18日にニューヨーク・タイムズ誌に掲載されたコラム](https://www.nytimes.com/1954/11/18/archives/sports-of-the-times-thats-telling-em-buster.html)の一節に由来する。
 
 >*First coach to depart*
 >
