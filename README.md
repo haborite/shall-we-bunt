@@ -1,3 +1,5 @@
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
 # Shall We Bunt?
 
 https://haborite.github.io/shall-we-bunt/
@@ -201,5 +203,3 @@ NPBの打撃成績データを使用（50打席以上）。
 >"Because," shrieked the Flash, casting off all pretense, "I'm gonna be at your office first thing in the morning and spend the day telling you how to run your business."
 
 >When a fellow spends his entire life in a sport—it doesn't matter whether it's football, baseball or anything else—it should be safe to assume that he knows a little more about it than folks in the stands.
-
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
