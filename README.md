@@ -105,7 +105,7 @@ $$
 
 ただし、一死については直接的なデータが無いため、無死と同じ値を用いた。また、無死一二塁からの「大失敗」後に遷移する状態は「二死二塁」であると仮定した。
 
-本アプリでは予めこれらの事象の確率が「NPB平均」としてランナー状況に応じて自動入力されるが、ユーザーが「成功率（成功＋オールセーフ）」を手動入力することも可能である。この場合、成功率の値に応じて上記4事象の確率を線形スケーリングする。
+本アプリでは予めこれらの事象の確率が「NPB平均」としてランナー状況に応じて自動入力されるが、ユーザーが「成功率（成功＋オールセーフ）」を手動入力することも可能である。この場合、成功率の値に応じて上記4事象の確率を線形スケーリングさせる。
 
 ---
 
@@ -175,16 +175,16 @@ NPBの現行シーズンにおける打撃成績データを使用（50打席以
 
 本サイト名 "Shall We Bunt?" は、[1954年11月18日にニューヨーク・タイムズ誌に掲載されたコラムの一節]("https://www.nytimes.com/1954/11/18/archives/sports-of-the-times-thats-telling-em-buster.html")に由来する。
 
->First coach to depart
-
+>*First coach to depart*
+>
 >Many years ago when Frank Frisch was managing the Pittsburgh Pirates, a leather-lunged fan in a box behind third base kept heckling the old Flash and second-guessing him at every turn. At one spot in the game a hairline decision had to be made. Should the batter bunt or hit away? The mischievous Frisch called time and ceremoniously walked over to leather-lungs.
-
+>
 >"I'm in a quandary, pal," said the Flash. "I need your help. **Shall we bunt** or hit away ?". It's a long and funny story the way Frisch tells it. But for the rest of the game he kept seeking advice from the know-it-all. Then in the ninth inning the Flash made his last visit to the box.
 
->Returning the Favor
-
+>*Returning the Favor*
+>
 >"I don't know what I'd have done without you, pal," said Frisch pleasantly. "Now I'd like you to give me your name and the place where you work."
-
+>
 >"Because," shrieked the Flash, casting off all pretense, "I'm gonna be at your office first thing in the morning and spend the day telling you how to run your business."
-
+>
 >When a fellow spends his entire life in a sport—it doesn't matter whether it's football, baseball or anything else—it should be safe to assume that he knows a little more about it than folks in the stands.
