@@ -25,16 +25,17 @@ https://haborite.github.io/shall-we-bunt/
 
 攻撃状態は以下の25状態で表現され、吸収マルコフ過程として扱われる：
 
-- アウトカウント: 0, 1, 2, (3=チェンジ)
+- アウトカウント: 3通り
 - 走者状況: 8通り (なし, 一塁, 二塁, 三塁, 一二塁, 一三塁, 二三塁, 満塁)
+- 吸収状態: 3アウト（チェンジ）
 
-→ 合計 `3 × 8 + 吸収状態 = 25状態`
+合計: 3 × 8 + 吸収状態 = 25状態
 
 ---
 
 ### 遷移モデル
 
-各打撃イベントごとに、状態遷移確率行列を持つ：
+以下の各打撃イベントごとに、状態遷移確率行列を持つ：
 
 - 単打
 - 二塁打
@@ -46,9 +47,9 @@ https://haborite.github.io/shall-we-bunt/
 
 各打者について
 
-
-P(state → state') = Σ_event P(event) × P(state → state' | event)
-
+$$
+P(\text{state} \to \text{state}') = \sum_{\text{event}} P(\text{event}) \times P(\text{state} \to \text{state}' \mid \text{event})
+$$
 
 として遷移行列を構築する。
 
