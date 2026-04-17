@@ -3,6 +3,7 @@
 https://haborite.github.io/shall-we-bunt/
 
 野球における「バント vs ヒッティング」の意思決定を、マルコフ過程モデルに基づいて定量的に評価するWebアプリケーション。
+打力・打順・アウトカウント・ランナー状況・バント成功率を加味してヒッティング時とバント時の得点期待値と得点確率を計算・比較できる。
 
 ---
 
@@ -14,11 +15,7 @@ https://haborite.github.io/shall-we-bunt/
 - 1点以上得点確率 (Scoring Probability)
 - 得点分布 (Run Distribution)
 
-を **ヒッティング時 / バント時で比較**する。
-
-本プロジェクトは以下の実装をベースにしている：
-
-- https://github.com/ogu-kazemiya/baseball-state-simulator
+をヒッティング時 / バント時で比較する。
 
 ---
 
@@ -26,14 +23,12 @@ https://haborite.github.io/shall-we-bunt/
 
 ### 状態空間
 
-攻撃状態は以下の25状態で表現される：
+攻撃状態は以下の25状態で表現され、吸収マルコフ過程として扱われる：
 
 - アウトカウント: 0, 1, 2, (3=チェンジ)
 - 走者状況: 8通り (なし, 一塁, 二塁, 三塁, 一二塁, 一三塁, 二三塁, 満塁)
 
 → 合計 `3 × 8 + 吸収状態 = 25状態`
-
-これは吸収マルコフ過程として扱われる。
 
 ---
 
@@ -191,5 +186,20 @@ NPBの打撃成績データを使用（50打席以上）。
 
 ## 補遺
 
-本サイト名 "Shall We Bunt?" は、  
-1954年11月18日のニューヨーク・タイムズの記事に由来する。
+本サイト名 "Shall We Bunt?" は、[1954年11月18日にニューヨーク・タイムズ誌に掲載されたコラムの一節]("https://www.nytimes.com/1954/11/18/archives/sports-of-the-times-thats-telling-em-buster.html")に由来する。
+
+>First coach to depart
+
+>Many years ago when Frank Frisch was managing the Pittsburgh Pirates, a leather-lunged fan in a box behind third base kept heckling the old Flash and second-guessing him at every turn. At one spot in the game a hairline decision had to be made. Should the batter bunt or hit away? The mischievous Frisch called time and ceremoniously walked over to leather-lungs.
+
+>"I'm in a quandary, pal," said the Flash. "I need your help. **Shall we bunt** or hit away ?". It's a long and funny story the way Frisch tells it. But for the rest of the game he kept seeking advice from the know-it-all. Then in the ninth inning the Flash made his last visit to the box.
+
+>Returning the Favor
+
+>"I don't know what I'd have done without you, pal," said Frisch pleasantly. "Now I'd like you to give me your name and the place where you work."
+
+>"Because," shrieked the Flash, casting off all pretense, "I'm gonna be at your office first thing in the morning and spend the day telling you how to run your business."
+
+>When a fellow spends his entire life in a sport—it doesn't matter whether it's football, baseball or anything else—it should be safe to assume that he knows a little more about it than folks in the stands.
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
