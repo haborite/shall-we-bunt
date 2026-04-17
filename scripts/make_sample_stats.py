@@ -66,7 +66,7 @@ def summarize(df_part, name):
     obp = (s["安打"] + s["四球"] + s["死球"]) / pa if pa > 0 else 0
     return pd.DataFrame([{
         "Name": name,
-        "TeamName": "",
+        "TeamName": "-",
         "PA": pa,
         "打数": s["打数"],
         "安打": s["安打"],
@@ -86,9 +86,9 @@ def summarize(df_part, name):
 # 8. グループ集計
 # -----------------------------
 final = pd.concat([
-    summarize(batters[batters["名前"].isin(top10["名前"])], "NPB野手（上位10人）"),
-    summarize(batters, "NPB野手（全体）"),
-    summarize(pitchers, "NPB投手（全体）")
+    summarize(batters[batters["名前"].isin(top10["名前"])], "NPB野手 (Top10)"),
+    summarize(batters, "NPB野手 (全体)"),
+    summarize(pitchers, "NPB投手 (全体)")
 ], ignore_index=True)
 
 # -----------------------------
