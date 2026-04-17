@@ -1,16 +1,195 @@
-# React + Vite
+# Shall We Bunt?
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+https://haborite.github.io/shall-we-bunt/
 
-Currently, two official plugins are available:
+野球における「バント vs ヒッティング」の意思決定を、マルコフ過程モデルに基づいて定量的に評価するWebアプリケーション。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 概要
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+本ツールは、打順・打者特性・アウトカウント・走者状況を入力として、
 
-## Expanding the ESLint configuration
+- 得点期待値 (Expected Runs)
+- 1点以上得点確率 (Scoring Probability)
+- 得点分布 (Run Distribution)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+を **ヒッティング時 / バント時で比較**する。
+
+本プロジェクトは以下の実装をベースにしている：
+
+- https://github.com/ogu-kazemiya/baseball-state-simulator
+
+---
+
+## 理論
+
+### 状態空間
+
+攻撃状態は以下の25状態で表現される：
+
+- アウトカウント: 0, 1, 2, (3=チェンジ)
+- 走者状況: 8通り (なし, 一塁, 二塁, 三塁, 一二塁, 一三塁, 二三塁, 満塁)
+
+→ 合計 `3 × 8 + 吸収状態 = 25状態`
+
+これは吸収マルコフ過程として扱われる。
+
+---
+
+### 遷移モデル
+
+各打撃イベントごとに、状態遷移確率行列を持つ：
+
+- 単打
+- 二塁打
+- 三塁打
+- 本塁打
+- 四球
+- 三振
+- 凡打
+
+各打者について
+
+
+P(state → state') = Σ_event P(event) × P(state → state' | event)
+
+
+として遷移行列を構築する。
+
+---
+
+### 得点期待値
+
+状態 \( s \)、打者 \( i \) に対して：
+
+\[
+V_i(s) = \sum_{s'} P_i(s \to s') \left( R(s,s') + V_{i+1}(s') \right)
+\]
+
+これを全状態・全打者について連立一次方程式として解く。
+
+---
+
+### 得点確率（1点以上）
+
+報酬を
+
+- 得点あり → 1
+- 無得点 → 0
+
+として同様の連立方程式を解くことで、
+
+\[
+P(\text{1点以上得点})
+\]
+
+を厳密に求める。
+
+---
+
+### 得点分布
+
+- 状態 × 打者 × 得点累積
+
+の確率分布を逐次伝播させることで
+
+```
+P(0点), P(1点), ..., P(8点以上)
+```
+
+を計算する。
+
+---
+
+### バントモデル
+
+バントは以下の4事象に分解：
+
+- 大失敗
+- 失敗
+- 成功
+- オールセーフ
+
+ユーザー入力の「成功率（成功＋オールセーフ）」に応じて、  
+これらの確率を線形スケーリングする。
+
+---
+
+## 実装
+
+### フロントエンド
+
+- React (Vite)
+- Tailwind CSS
+- shadcn/ui
+
+---
+
+### 数値計算
+
+- ガウス消去法による連立一次方程式の解析解
+- 確率和チェック・行列正規化を実装
+
+---
+
+### CSVフォーマット
+
+- Baseball Reference形式に対応
+
+---
+
+## データ
+
+### 進塁モデル
+
+以下をベースに構築：
+
+- MLB Statcast (Baseball Savant)
+
+各打撃イベントごとの状態遷移を集計し、25×25行列として使用。
+
+---
+
+### 打者データ
+
+- https://npbdata.jp
+
+NPBの打撃成績データを使用（50打席以上）。
+
+---
+
+## 参考実装
+
+本プロジェクトは以下の実装をベースにしている：
+
+- https://github.com/ogu-kazemiya/baseball-state-simulator
+
+本リポジトリでは、
+
+- JavaScriptへの再実装
+- UIの構築
+- バントモデルの拡張
+
+を行っている。
+
+---
+
+## 制限
+
+現実に存在する様々な条件は考慮していない。
+
+例：
+
+- 選手ごとの走塁能力の違い
+- 選手ごとの打球方向・打球質の違い
+- 投手との相性
+- 相手チームの守備力
+- 試合状況（スコア・イニング）
+
+---
+
+## 補遺
+
+本サイト名 "Shall We Bunt?" は、  
+1954年11月18日のニューヨーク・タイムズの記事に由来する。
