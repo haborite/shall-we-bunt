@@ -42,6 +42,7 @@ while True:
     time.sleep(1)
 
 df = pd.DataFrame(all_rows, columns=headers)
+df = df.drop_duplicates()
 
 drop_cols = [
     "打率", "試合", "塁打", "打点", "得点",
@@ -82,6 +83,6 @@ for col in numeric_cols:
     if col in df.columns:
         df[col] = pd.to_numeric(df[col], errors="coerce")
 
-df.to_csv("npb_fielder_stats_clean.csv", index=False, encoding="utf-8-sig")
+df.to_csv("../public/npb_fielder_stats.csv", index=False, encoding="utf-8-sig")
 
-print("Saved to npb_fielder_stats_clean.csv")
+print("Saved to npb_fielder_stats.csv")
