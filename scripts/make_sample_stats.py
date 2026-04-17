@@ -4,7 +4,7 @@ import numpy as np
 # -----------------------------
 # 1. 読み込み & 公式戦フィルタ
 # -----------------------------
-df = pd.read_csv("player_batting_stats_jp_2025.csv")
+df = pd.read_csv("../local_data/player_batting_stats_jp_2025.csv")
 df = df[df["ゲームタイプ"] == "公式戦"]
 
 # -----------------------------
@@ -32,14 +32,27 @@ bat["OBP"] = np.where(bat["PA"] > 0, (bat["安打"] + bat["四球"] + bat["死�
 bat["SLG"] = np.where(bat["打数"] > 0, bat["TB"] / bat["打数"], 0)
 bat["OPS"] = bat["OBP"] + bat["SLG"]
 
-# 規定打席（443）
+# 規定打席
 bat_qual = bat[bat["PA"] >= 443]
 
-top24 = bat_qual.nlargest(24, "OPS")
-bottom24 = bat_qual.nsmallest(24, "OPS")
+# -----------------------------
+# 5. 上位・下位5%（quantile）
+# -----------------------------
+upper = bat_qual["OPS"].quantile(0.95)
+lower = bat_qual["OPS"].quantile(0.05)
+
+top5pct = bat_qual[bat_qual["OPS"] >= upper]
+bottom5pct = bat_qual[bat_qual["OPS"] <= lower]
 
 # -----------------------------
-# 5. 集計関数
+# ★ 追加：人数表示
+# -----------------------------
+print("規定打席到達者数:", len(bat_qual))
+print("上位5%該当者数:", len(top5pct))
+print("下位5%該当者数:", len(bottom5pct))
+
+# -----------------------------
+# 6. 集計関数
 # -----------------------------
 def summarize(df_part, name):
     s = df_part[cols].sum()
@@ -72,17 +85,17 @@ def summarize(df_part, name):
     }])
 
 # -----------------------------
-# 6. グループ作成
+# 7. グループ作成（順番変更）
 # -----------------------------
 final = pd.concat([
+    summarize(batters[batters["名前"].isin(top5pct["名前"])], "NPB野手（上位5%）"),
     summarize(batters, "NPB野手（平均）"),
-    summarize(pitchers, "NPB投手（平均）"),
-    summarize(batters[batters["名前"].isin(top24["名前"])], "NPB野手（上位）"),
-    summarize(batters[batters["名前"].isin(bottom24["名前"])], "NPB野手（下位）")
+    summarize(batters[batters["名前"].isin(bottom5pct["名前"])], "NPB野手（下位5%）"),
+    summarize(pitchers, "NPB投手（平均）")
 ], ignore_index=True)
 
 # -----------------------------
-# 7. 整形
+# 8. 整形
 # -----------------------------
 final.insert(0, "Rk", range(1, len(final) + 1))
 
@@ -99,7 +112,7 @@ final = final.rename(columns={
 })
 
 # -----------------------------
-# 8. 出力
+# 9. 出力
 # -----------------------------
 final.to_csv("../public/npb_avg_stats.csv", index=False)
 
