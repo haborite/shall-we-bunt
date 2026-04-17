@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist -r https://github.com/haborite/shall-we-bunt.git"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.2.8",
