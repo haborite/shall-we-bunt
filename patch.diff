@@ -1,0 +1,590 @@
+--- a/BuntStrategyGui.tsx
++++ b/BuntStrategyGui.tsx
+@@ -259,6 +259,201 @@
+       );
+     }
+   }
++
++  const evaluationCard = (
++    <Card className="rounded-2xl shadow-sm">
++      <CardHeader>
++        <CardTitle className="text-lg">評価条件</CardTitle>
++      </CardHeader>
++      <CardContent className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
++        <div className="space-y-2">
++          <Label>ランナー状況</Label>
++          <Select value={selectedState} onValueChange={setSelectedState}>
++            <SelectTrigger className="rounded-xl bg-white">
++              <SelectValue />
++            </SelectTrigger>
++            <SelectContent>
++              {STATE_OPTIONS.map((option) => (
++                <SelectItem key={option.value} value={option.value}>
++                  {option.label}
++                </SelectItem>
++              ))}
++            </SelectContent>
++          </Select>
++        </div>
++
++        <div className="space-y-2">
++          <Label>現在の打順</Label>
++          <Select value={currentBatterSlot} onValueChange={setCurrentBatterSlot}>
++            <SelectTrigger className="rounded-xl bg-white">
++              <SelectValue />
++            </SelectTrigger>
++            <SelectContent>
++              {Array.from({ length: 9 }, (_, index) => (
++                <SelectItem key={index + 1} value={String(index + 1)}>
++                  {index + 1} 番
++                </SelectItem>
++              ))}
++            </SelectContent>
++          </Select>
++        </div>
++
++        <div className="space-y-2">
++          <div className="grid grid-cols-[160px_auto] items-center gap-x-4 gap-y-2">
++            <Label className="whitespace-nowrap">バント成功率（％）</Label>
++
++            <label className="flex items-center gap-1 text-sm whitespace-nowrap">
++              <input
++                type="radio"
++                name="bunt-input-mode"
++                value="npb_default"
++                checked={buntInputMode === "npb_default"}
++                onChange={(event) =>
++                  setBuntInputMode(event.target.value as "npb_default" | "manual")
++                }
++              />
++              <span>NPB平均値</span>
++            </label>
++
++            <div className="flex items-center gap-2 whitespace-nowrap">
++              <div className="w-[120px]">
++                <Input
++                  inputMode="decimal"
++                  value={displayedBuntSuccessRate}
++                  onChange={(event) => {
++                    if (buntInputMode !== "manual") return;
++
++                    let value = event.target.value;
++                    value = value
++                      .replace(/[０-９]/g, (s) =>
++                        String.fromCharCode(s.charCodeAt(0) - 0xfee0)
++                      )
++                      .replace(/．/g, ".");
++
++                    if (/^[0-9]*\.?[0-9]*$/.test(value)) {
++                      setManualBuntSuccessRate(value);
++                    }
++                  }}
++                  disabled={buntInputMode !== "manual"}
++                  className={`rounded-xl ${
++                    buntInputMode !== "manual"
++                      ? "bg-slate-200 text-slate-900"
++                      : "bg-white"
++                  }`}
++                />
++              </div>
++              <span className="text-sm text-slate-500">％</span>
++            </div>
++
++            <label className="flex items-center gap-1 text-sm whitespace-nowrap">
++              <input
++                type="radio"
++                name="bunt-input-mode"
++                value="manual"
++                checked={buntInputMode === "manual"}
++                onChange={(event) =>
++                  setBuntInputMode(event.target.value as "npb_default" | "manual")
++                }
++              />
++              <span>手動入力</span>
++            </label>
++          </div>
++        </div>
++      </CardContent>
++    </Card>
++  );
++
++  const lineupCard = (
++    <Card className="rounded-2xl shadow-sm">
++      <CardHeader>
++        <CardTitle className="text-lg">打順</CardTitle>
++        <CardDescription>1〜9番の打者を選択します</CardDescription>
++
++        <Select value={teamFilter} onValueChange={setTeamFilter}>
++          <SelectTrigger className="w-full rounded-xl bg-white sm:w-[270px]">
++            <SelectValue />
++          </SelectTrigger>
++          <SelectContent>
++            {TEAM_FILTER_OPTIONS.map((option) => (
++              <SelectItem key={option.value} value={option.value}>
++                <span className="inline-flex items-center gap-2">
++                  {option.value !== "ALL" && <TeamMark teamName={option.value} />}
++                  <span>{option.label}</span>
++                </span>
++              </SelectItem>
++            ))}
++          </SelectContent>
++        </Select>
++      </CardHeader>
++
++      <CardContent>
++        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
++          {lineup.map((slot, slotIndex) => {
++            const isCurrentBatter = Number(currentBatterSlot) === slot.slot;
++
++            return (
++              <div
++                key={slot.slot}
++                className={`space-y-2 rounded-2xl border p-3 transition-colors ${
++                  isCurrentBatter
++                    ? "border-slate-900 bg-slate-100 shadow-sm"
++                    : "bg-white"
++                }`}
++              >
++                <div className="flex items-center justify-between">
++                  <Label>{slot.slot} 番</Label>
++                  {isCurrentBatter && (
++                    <Badge className="rounded-full bg-slate-900 text-white hover:bg-slate-900">
++                      現在の打者
++                    </Badge>
++                  )}
++                </div>
++
++                <Select
++                  value={slot.playerKey || undefined}
++                  onValueChange={(value) => updateLineup(slotIndex, value)}
++                >
++                  <SelectTrigger className="rounded-xl bg-white">
++                    <SelectValue placeholder="選手を選択" />
++                  </SelectTrigger>
++                  <SelectContent>
++                    {playerOptionsBySlot[slotIndex].map((player) => (
++                      <SelectItem key={`${slot.slot}-${player.key}`} value={player.key}>
++                        <TeamPlayerLabel
++                          name={player.name}
++                          teamName={player.teamName}
++                        />
++                      </SelectItem>
++                    ))}
++                  </SelectContent>
++                </Select>
++              </div>
++            );
++          })}
++        </div>
++      </CardContent>
++    </Card>
++  );
++
++  const playersCard = (
++    <Card className="rounded-2xl shadow-sm">
++      <CardHeader>
++        <CardTitle className="text-lg">打者ごとの打撃イベント確率</CardTitle>
++      </CardHeader>
++      <CardContent>
++        <ScrollArea className="h-[420px] sm:h-[520px] lg:h-[660px]">
++          <div className="space-y-4">
++            {result?.lineupProbs ? (
++              result.lineupProbs.map((player, index) => (
++                <div
++                  key={`${String(player.Name)}-${index}`}
++                  className="rounded-2xl border p-4"
++                >
++                  <div className="mb-3 font-medium">
++                    {index + 1} 番: {String(player.Name)}
++                  </div>
++
++                  <div className="grid grid-cols-2 gap-2 text-sm md:grid-cols-4">
++                    {EVENT_KEYS.map((key) => (
++                      <div key={key} className="rounded-xl bg-slate-50 p-2">
++                        <div className="text-slate-500">{EVENT_JP[key]}</div>
++                        <div className="font-medium">
++                          {(Number(player[key]) * 100).toFixed(2)}%
++                        </div>
++                      </div>
++                    ))}
++                  </div>
++                </div>
++              ))
++            ) : (
++              <div className="text-sm text-slate-600">まだ解析結果がありません</div>
++            )}
++          </div>
++        </ScrollArea>
++      </CardContent>
++    </Card>
++  );
++
++  const resultPanel = (
++    <>
++      {result ? (
++        <>
++          <ComparisonSection
++            title="この回の得点期待値"
++            leftLabel="ヒッティング"
++            leftValue={`${result.noBuntEV.toFixed(2)} 点`}
++            rightLabel="バント"
++            rightValue={`${result.buntEV.toFixed(2)} 点`}
++            changeRateValue={formatExpectedRunsChangeRate(
++              result.expectedRunsChangeRate
++            )}
++            changeRate={result.expectedRunsChangeRate}
++          />
++
++          <ComparisonSection
++            title="この回の得点確率"
++            leftLabel="ヒッティング"
++            leftValue={`${(result.noBuntProb * 100).toFixed(1)} %`}
++            rightLabel="バント"
++            rightValue={`${(result.buntProb * 100).toFixed(1)} %`}
++            changeRateValue={formatScoringProbabilityChangeRate(
++              result.scoringProbabilityChangeRate
++            )}
++            changeRate={result.scoringProbabilityChangeRate}
++          />
++
++          <div className="grid gap-4 xl:grid-cols-2">
++            <DistributionBars
++              title="ヒッティング時の得点分布"
++              data={result.noBuntDist}
++            />
++            <DistributionBars
++              title="バント時の得点分布"
++              data={result.buntDist}
++            />
++          </div>
++
++          {/* 必要なら有効化 */}
++          {/* <BuntOutcomeSummary outcomes={result.buntOutcomes} /> */}
++        </>
++      ) : (
++        <Card className="rounded-2xl shadow-sm">
++          <CardContent className="p-6 text-sm text-slate-600">
++            まだ解析結果がありません
++          </CardContent>
++        </Card>
++      )}
++    </>
++  );
+ 
+   return (
+     <div className="min-h-screen bg-slate-50 px-3 py-4 text-slate-900 sm:px-4 sm:py-6 lg:p-6">
+@@ -277,182 +472,43 @@
+           </Alert>
+         )}
+ 
+-        <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+-          <div className="order-2 space-y-6 lg:order-1">
+-            <Card className="rounded-2xl shadow-sm">
+-              <CardHeader>
+-                <CardTitle className="text-lg">評価条件</CardTitle>
+-              </CardHeader>
+-              <CardContent className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+-                <div className="space-y-2">
+-                  <Label>ランナー状況</Label>
+-                  <Select value={selectedState} onValueChange={setSelectedState}>
+-                    <SelectTrigger className="rounded-xl bg-white">
+-                      <SelectValue />
+-                    </SelectTrigger>
+-                    <SelectContent>
+-                      {STATE_OPTIONS.map((option) => (
+-                        <SelectItem key={option.value} value={option.value}>
+-                          {option.label}
+-                        </SelectItem>
+-                      ))}
+-                    </SelectContent>
+-                  </Select>
+-                </div>
+-
+-                <div className="space-y-2">
+-                  <Label>現在の打順</Label>
+-                  <Select value={currentBatterSlot} onValueChange={setCurrentBatterSlot}>
+-                    <SelectTrigger className="rounded-xl bg-white">
+-                      <SelectValue />
+-                    </SelectTrigger>
+-                    <SelectContent>
+-                      {Array.from({ length: 9 }, (_, index) => (
+-                        <SelectItem key={index + 1} value={String(index + 1)}>
+-                          {index + 1} 番
+-                        </SelectItem>
+-                      ))}
+-                    </SelectContent>
+-                  </Select>
+-                </div>
+-
+-                <div className="space-y-2">
+-                  <div className="grid grid-cols-[160px_auto] items-center gap-x-4 gap-y-2">
+-                    <Label className="whitespace-nowrap">バント成功率（％）</Label>
+-
+-                    <label className="flex items-center gap-1 text-sm whitespace-nowrap">
+-                      <input
+-                        type="radio"
+-                        name="bunt-input-mode"
+-                        value="npb_default"
+-                        checked={buntInputMode === "npb_default"}
+-                        onChange={(event) =>
+-                          setBuntInputMode(event.target.value as "npb_default" | "manual")
+-                        }
+-                      />
+-                      <span>NPB平均値</span>
+-                    </label>
+-
+-                    <div className="flex items-center gap-2 whitespace-nowrap">
+-                      <div className="w-[120px]">
+-                        <Input
+-                          inputMode="decimal"
+-                          value={displayedBuntSuccessRate}
+-                          onChange={(event) => {
+-                            if (buntInputMode !== "manual") return;
+-
+-                            let value = event.target.value;
+-                            value = value
+-                              .replace(/[０-９]/g, (s) =>
+-                                String.fromCharCode(s.charCodeAt(0) - 0xfee0)
+-                              )
+-                              .replace(/．/g, ".");
+-
+-                            if (/^[0-9]*\.?[0-9]*$/.test(value)) {
+-                              setManualBuntSuccessRate(value);
+-                            }
+-                          }}
+-                          disabled={buntInputMode !== "manual"}
+-                          className={`rounded-xl ${
+-                            buntInputMode !== "manual"
+-                              ? "bg-slate-200 text-slate-900"
+-                              : "bg-white"
+-                          }`}
+-                        />
+-                      </div>
+-                      <span className="text-sm text-slate-500">％</span>
+-                    </div>
+-
+-                    <label className="flex items-center gap-1 text-sm whitespace-nowrap">
+-                      <input
+-                        type="radio"
+-                        name="bunt-input-mode"
+-                        value="manual"
+-                        checked={buntInputMode === "manual"}
+-                        onChange={(event) =>
+-                          setBuntInputMode(event.target.value as "npb_default" | "manual")
+-                        }
+-                      />
+-                      <span>手動入力</span>
+-                    </label>
+-                  </div>
+-                </div>
+-              </CardContent>
+-            </Card>
+-
+-            <Card className="rounded-2xl shadow-sm">
+-              <CardHeader>
+-                <CardTitle className="text-lg">打順</CardTitle>
+-                <CardDescription>1〜9番の打者を選択します</CardDescription>
+-
+-                <Select value={teamFilter} onValueChange={setTeamFilter}>
+-                  <SelectTrigger className="w-full rounded-xl bg-white sm:w-[270px]">
+-                    <SelectValue />
+-                  </SelectTrigger>
+-                  <SelectContent>
+-                    {TEAM_FILTER_OPTIONS.map((option) => (
+-                      <SelectItem key={option.value} value={option.value}>
+-                        <span className="inline-flex items-center gap-2">
+-                          {option.value !== "ALL" && <TeamMark teamName={option.value} />}
+-                          <span>{option.label}</span>
+-                        </span>
+-                      </SelectItem>
+-                    ))}
+-                  </SelectContent>
+-                </Select>
+-              </CardHeader>
+-
+-              <CardContent>
+-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+-                  {lineup.map((slot, slotIndex) => {
+-                    const isCurrentBatter = Number(currentBatterSlot) === slot.slot;
+-
+-                    return (
+-                      <div
+-                        key={slot.slot}
+-                        className={`space-y-2 rounded-2xl border p-3 transition-colors ${
+-                          isCurrentBatter
+-                            ? "border-slate-900 bg-slate-100 shadow-sm"
+-                            : "bg-white"
+-                        }`}
+-                      >
+-                        <div className="flex items-center justify-between">
+-                          <Label>{slot.slot} 番</Label>
+-                          {isCurrentBatter && (
+-                            <Badge className="rounded-full bg-slate-900 text-white hover:bg-slate-900">
+-                              現在の打者
+-                            </Badge>
+-                          )}
+-                        </div>
+-
+-                        <Select
+-                          value={slot.playerKey || undefined}
+-                          onValueChange={(value) => updateLineup(slotIndex, value)}
+-                        >
+-                          <SelectTrigger className="rounded-xl bg-white">
+-                            <SelectValue placeholder="選手を選択" />
+-                          </SelectTrigger>
+-                          <SelectContent>
+-                            {playerOptionsBySlot[slotIndex].map((player) => (
+-                              <SelectItem key={`${slot.slot}-${player.key}`} value={player.key}>
+-                                <TeamPlayerLabel
+-                                  name={player.name}
+-                                  teamName={player.teamName}
+-                                />
+-                              </SelectItem>
+-                            ))}
+-                          </SelectContent>
+-                        </Select>
+-                      </div>
+-                    );
+-                  })}
+-                </div>
+-              </CardContent>
+-            </Card>
+-
++        <div className="lg:hidden">
++          <Tabs defaultValue="result" className="w-full">
++            <TabsList className="grid h-11 w-full grid-cols-3 rounded-2xl">
++              <TabsTrigger value="result">結果</TabsTrigger>
++              <TabsTrigger value="conditions">条件</TabsTrigger>
++              <TabsTrigger value="data">データ</TabsTrigger>
++            </TabsList>
++
++            <TabsContent value="result" className="space-y-6">
++              {resultPanel}
++            </TabsContent>
++
++            <TabsContent value="conditions" className="space-y-6">
++              {evaluationCard}
++              {lineupCard}
++            </TabsContent>
++
++            <TabsContent value="data" className="space-y-6">
++              {playersCard}
++            </TabsContent>
++          </Tabs>
++        </div>
++
++        <div className="hidden gap-6 lg:grid lg:grid-cols-[1.1fr_0.9fr]">
++          <div className="space-y-6">
++            {evaluationCard}
++            {lineupCard}
+             <Card className="rounded-2xl shadow-sm">
+               <CardHeader>
+                 <CardTitle className="flex items-center gap-2 text-lg">
+@@ -485,73 +541,12 @@
+             </Card>
+           </div>
+ 
+-          <div className="order-1 space-y-6 lg:order-2">
++          <div className="space-y-6">
+             <Tabs defaultValue="result" className="w-full">
+               <TabsList className="grid h-11 w-full grid-cols-2 rounded-2xl">
+                 <TabsTrigger value="result">結果</TabsTrigger>
+                 <TabsTrigger value="players">打者データ</TabsTrigger>
+               </TabsList>
+ 
+               <TabsContent value="result" className="space-y-6">
+-                {result ? (
+-                  <>
+-                    <ComparisonSection
+-                      title="この回の得点期待値"
+-                      leftLabel="ヒッティング"
+-                      leftValue={`${result.noBuntEV.toFixed(2)} 点`}
+-                      rightLabel="バント"
+-                      rightValue={`${result.buntEV.toFixed(2)} 点`}
+-                      changeRateValue={formatExpectedRunsChangeRate(
+-                        result.expectedRunsChangeRate
+-                      )}
+-                      changeRate={result.expectedRunsChangeRate}
+-                    />
+-
+-                    <ComparisonSection
+-                      title="この回の得点確率"
+-                      leftLabel="ヒッティング"
+-                      leftValue={`${(result.noBuntProb * 100).toFixed(1)} %`}
+-                      rightLabel="バント"
+-                      rightValue={`${(result.buntProb * 100).toFixed(1)} %`}
+-                      changeRateValue={formatScoringProbabilityChangeRate(
+-                        result.scoringProbabilityChangeRate
+-                      )}
+-                      changeRate={result.scoringProbabilityChangeRate}
+-                    />
+-
+-                    <div className="grid gap-4 xl:grid-cols-2">
+-                      <DistributionBars
+-                        title="ヒッティング時の得点分布"
+-                        data={result.noBuntDist}
+-                      />
+-                      <DistributionBars
+-                        title="バント時の得点分布"
+-                        data={result.buntDist}
+-                      />
+-                    </div>
+-
+-                    {/* 必要なら有効化 */}
+-                    {/* <BuntOutcomeSummary outcomes={result.buntOutcomes} /> */}
+-                  </>
+-                ) : (
+-                  <Card className="rounded-2xl shadow-sm">
+-                    <CardContent className="p-6 text-sm text-slate-600">
+-                      まだ解析結果がありません
+-                    </CardContent>
+-                  </Card>
+-                )}
++                {resultPanel}
+               </TabsContent>
+ 
+               <TabsContent value="players">
+-                <Card className="rounded-2xl shadow-sm">
+-                  <CardHeader>
+-                    <CardTitle className="text-lg">打者ごとの打撃イベント確率</CardTitle>
+-                  </CardHeader>
+-                  <CardContent>
+-                    <ScrollArea className="h-[420px] sm:h-[520px] lg:h-[660px]">
+-                      <div className="space-y-4">
+-                        {result?.lineupProbs ? (
+-                          result.lineupProbs.map((player, index) => (
+-                            <div
+-                              key={`${String(player.Name)}-${index}`}
+-                              className="rounded-2xl border p-4"
+-                            >
+-                              <div className="mb-3 font-medium">
+-                                {index + 1} 番: {String(player.Name)}
+-                              </div>
+-
+-                              <div className="grid grid-cols-2 gap-2 text-sm md:grid-cols-4">
+-                                {EVENT_KEYS.map((key) => (
+-                                  <div key={key} className="rounded-xl bg-slate-50 p-2">
+-                                    <div className="text-slate-500">
+-                                      {EVENT_JP[key]}
+-                                    </div>
+-                                    <div className="font-medium">
+-                                      {(Number(player[key]) * 100).toFixed(2)}%
+-                                    </div>
+-                                  </div>
+-                                ))}
+-                              </div>
+-                            </div>
+-                          ))
+-                        ) : (
+-                          <div className="text-sm text-slate-600">
+-                            まだ解析結果がありません
+-                          </div>
+-                        )}
+-                      </div>
+-                    </ScrollArea>
+-                  </CardContent>
+-                </Card>
++                {playersCard}
+               </TabsContent>
+             </Tabs>
+           </div>
