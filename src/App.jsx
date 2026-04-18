@@ -1153,12 +1153,12 @@ export default function BuntStrategyGui() {
           <CardContent className="space-y-2 text-sm text-slate-600">
             <p>・本サイトのソースコードは<a href="https://github.com/haborite/shall-we-bunt" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">こちら</a>で公開しています。</p>
             <p>・野球の攻撃状態を25状態（アウトカウント × ランナー状況）の吸収マルコフ過程としてモデル化し、逐次状態間遷移計算により任意の状況からの得点期待値と得点確率を算出しています。</p>
-            <p>・<a href="https://github.com/ogu-kazemiya/baseball-state-simulator" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">ogu-kazemiya氏によって公開されている</a>、各打撃イベント(単打・二塁打・三塁打・本塁打・三振・四死球・凡打)による攻撃状態間の遷移確率行列を状態遷移モデルとして用いました。</p>
+            <p>・状態間遷移モデルとしては、7種類の打撃イベント(単打・二塁打・三塁打・本塁打・三振・四死球・凡打)による攻撃状態間の遷移確率行列を用いました。</p>
             <p>・遷移確率行列の構築には<a href="https://baseballsavant.mlb.com/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Baseball Savant</a>で公開されているMLBのStatcastデータを用いました。</p>
-            <p>・バント試行時の状態遷移モデルには、<a href="https://1point02.jp/op/gnav/column/bs/column.aspx?cid=53680" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">DELTA社が公開しているバントの結果分布</a>データにいくつかの仮定を加えて用いました。</p>
+            <p>・バント試行時の状態遷移モデルとしては、<a href="https://1point02.jp/op/gnav/column/bs/column.aspx?cid=53680" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">DELTA株式会社が公開している4種類のバント結果分布（大成功・成功・失敗・大失敗）</a>にいくつかの仮定を加えて用いました。</p>
             <p>・「バント成功率」は「意図通りの進塁 + オールセーフ」の合計確率として定義しています。</p>
             <p>・各選手の打席内容データは現行シーズンのものです。<a href="https://npbdata.jp" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">プロ野球データ</a>で公開されているものを用いました（50打席以上の選手が対象）。</p>
-            <p>・選手ごとの走塁能力、凡打の内容、投手との相性、相手チームの守備力といった要素は考慮されていません。</p>
+            <p>・選手ごとの走塁能力、凡打内容、相手チームの投手力・守備力といった要素は考慮されていません。</p>
           </CardContent>
         </Card>
 
