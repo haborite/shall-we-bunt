@@ -599,7 +599,7 @@ export default function BuntStrategyGui() {
                                 {index + 1} 番: {String(player.Name)}
                               </div>
 
-                              <div className="grid grid-cols-2 gap-2 text-sm md:grid-cols-4">
+                              <div className="grid grid-cols-3 gap-2 text-sm md:grid-cols-4">
                                 {EVENT_KEYS.map((key) => (
                                   <div key={key} className="rounded-xl bg-slate-50 p-2">
                                     <div className="text-slate-500">
