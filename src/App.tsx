@@ -409,7 +409,7 @@ export default function BuntStrategyGui() {
               <CardHeader className="gap-2">
                 <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                   <div className="min-w-0">
-                    <div className="flex-row items-baseline gap-3">
+                    <div className="flex flex-row gap-3 items-baseline">
                       <CardTitle className="text-lg">打順</CardTitle>
                       <CardDescription className="text-sm">
                         1〜9番の打者を選択します
