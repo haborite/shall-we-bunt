@@ -303,110 +303,6 @@ export default function BuntStrategyGui() {
 
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="space-y-6">
-            <Card className="rounded-2xl shadow-sm">
-              <CardHeader>
-                <CardTitle className="text-lg">評価条件</CardTitle>
-              </CardHeader>
-              <CardContent className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>ランナー状況</Label>
-                  <Select value={selectedState} onValueChange={setSelectedState}>
-                    <SelectTrigger className="rounded-xl bg-white">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {STATE_OPTIONS.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label>現在の打順</Label>
-                  <Select value={currentBatterSlot} onValueChange={setCurrentBatterSlot}>
-                    <SelectTrigger className="rounded-xl bg-white">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array.from({ length: 9 }, (_, index) => (
-                        <SelectItem key={index + 1} value={String(index + 1)}>
-                          {index + 1} 番
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="grid grid-cols-[160px_auto] items-center gap-x-4 gap-y-2">
-                    <Label className="whitespace-nowrap">バント成功率（％）</Label>
-
-                    <label className="flex items-center gap-1 text-sm whitespace-nowrap">
-                      <input
-                        type="radio"
-                        name="bunt-input-mode"
-                        value="npb_default"
-                        checked={buntInputMode === "npb_default"}
-                        onChange={(event) =>
-                          setBuntInputMode(event.target.value as "npb_default" | "manual")
-                        }
-                      />
-                      <span>NPB平均値</span>
-                    </label>
-
-                    <div className="flex items-center gap-2 whitespace-nowrap">
-                      <div className="w-[120px]">
-                        <Input
-                          inputMode="decimal"
-                          value={displayedBuntSuccessRate}
-                          onChange={(event) => {
-                            if (buntInputMode !== "manual") return;
-
-                            let value = event.target.value;
-                            value = value
-                              .replace(/[０-９]/g, (s) =>
-                                String.fromCharCode(s.charCodeAt(0) - 0xfee0)
-                              )
-                              .replace(/．/g, ".");
-
-                            if (/^[0-9]*\.?[0-9]*$/.test(value)) {
-                              setManualBuntSuccessRate(value);
-                            }
-                          }}
-                          disabled={buntInputMode !== "manual"}
-                          className={`rounded-xl ${
-                            buntInputMode !== "manual"
-                              ? "bg-slate-200 text-slate-900"
-                              : "bg-white"
-                          }`}
-                        />
-                      </div>
-                      <span className="text-sm text-slate-500">％</span>
-                    </div>
-
-                    <label className="flex items-center gap-1 text-sm whitespace-nowrap">
-                      <input
-                        type="radio"
-                        name="bunt-input-mode"
-                        value="manual"
-                        checked={buntInputMode === "manual"}
-                        onChange={(event) =>
-                          setBuntInputMode(event.target.value as "npb_default" | "manual")
-                        }
-                      />
-                      <span>手動入力</span>
-                    </label>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-          </div>
-
-          <div className="space-y-6">
             <Tabs defaultValue="result" className="w-full">
               <TabsList className="grid h-11 w-full grid-cols-2 rounded-2xl">
                 <TabsTrigger value="condition">条件</TabsTrigger>
@@ -415,84 +311,187 @@ export default function BuntStrategyGui() {
               </TabsList>
 
               <TabsContent value="condition" className="space-y-6">
-                <Card className="rounded-2xl shadow-sm">
-                  <CardHeader className="gap-2">
-                    <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                      <div className="min-w-0">
-                        <div className="flex flex-row gap-3 items-baseline">
-                          <CardTitle className="text-lg">打順</CardTitle>
-                          <CardDescription className="text-sm">
-                            1〜9番の打者を選択します
-                          </CardDescription>
-                        </div>
-                      </div>
-
-                      <div className="w-full md:w-auto">
-                        <Select value={teamFilter} onValueChange={setTeamFilter}>
-                          <SelectTrigger className="w-full rounded-xl bg-white md:w-[270px]">
+                <div className="space-y-6">
+                  <Card className="rounded-2xl shadow-sm">
+                    <CardHeader>
+                      <CardTitle className="text-lg">評価条件</CardTitle>
+                    </CardHeader>
+                    <CardContent className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>ランナー状況</Label>
+                        <Select value={selectedState} onValueChange={setSelectedState}>
+                          <SelectTrigger className="rounded-xl bg-white">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            {TEAM_FILTER_OPTIONS.map((option) => (
+                            {STATE_OPTIONS.map((option) => (
                               <SelectItem key={option.value} value={option.value}>
-                                <span className="inline-flex items-center gap-2">
-                                  {option.value !== "ALL" && <TeamMark teamName={option.value} />}
-                                  <span>{option.label}</span>
-                                </span>
+                                {option.label}
                               </SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
                       </div>
-                    </div>
-                  </CardHeader>
 
-                  <CardContent>
-                    <div className="grid grid-cols-2 gap-3">
-                      {lineup.map((slot, slotIndex) => {
-                        const isCurrentBatter = Number(currentBatterSlot) === slot.slot;
+                      <div className="space-y-2">
+                        <Label>現在の打順</Label>
+                        <Select value={currentBatterSlot} onValueChange={setCurrentBatterSlot}>
+                          <SelectTrigger className="rounded-xl bg-white">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {Array.from({ length: 9 }, (_, index) => (
+                              <SelectItem key={index + 1} value={String(index + 1)}>
+                                {index + 1} 番
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
 
-                        return (
-                          <div
-                            key={slot.slot}
-                            className={`space-y-2 rounded-2xl p-2 transition-colors ${
-                              isCurrentBatter
-                                ? "border border-slate-900 bg-slate-100 shadow-sm"
-                                : "bg-white"
-                            }`}
-                          >
-                            <div className="flex items-center gap-2">
-                              <Label className="text-sm">{slot.slot}</Label>
-                              <Select
-                                value={slot.playerKey || undefined}
-                                onValueChange={(value) => updateLineup(slotIndex, value)}
-                              >
-                                <SelectTrigger className="rounded-xl bg-white">
-                                  <SelectValue placeholder="選手を選択" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {playerOptionsBySlot[slotIndex].map((player) => (
-                                    <SelectItem key={`${slot.slot}-${player.key}`} value={player.key}>
-                                      <TeamPlayerLabel
-                                        name={player.name}
-                                        teamName={player.teamName}
-                                      />
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                              {isCurrentBatter && (
-                                <Badge className="rounded-full bg-slate-900 text-white hover:bg-slate-900">
-                                  現
-                                </Badge>
-                              )}
+                      <div className="space-y-2">
+                        <div className="grid grid-cols-[160px_auto] items-center gap-x-4 gap-y-2">
+                          <Label className="whitespace-nowrap">バント成功率（％）</Label>
+
+                          <label className="flex items-center gap-1 text-sm whitespace-nowrap">
+                            <input
+                              type="radio"
+                              name="bunt-input-mode"
+                              value="npb_default"
+                              checked={buntInputMode === "npb_default"}
+                              onChange={(event) =>
+                                setBuntInputMode(event.target.value as "npb_default" | "manual")
+                              }
+                            />
+                            <span>NPB平均値</span>
+                          </label>
+
+                          <div className="flex items-center gap-2 whitespace-nowrap">
+                            <div className="w-[120px]">
+                              <Input
+                                inputMode="decimal"
+                                value={displayedBuntSuccessRate}
+                                onChange={(event) => {
+                                  if (buntInputMode !== "manual") return;
+
+                                  let value = event.target.value;
+                                  value = value
+                                    .replace(/[０-９]/g, (s) =>
+                                      String.fromCharCode(s.charCodeAt(0) - 0xfee0)
+                                    )
+                                    .replace(/．/g, ".");
+
+                                  if (/^[0-9]*\.?[0-9]*$/.test(value)) {
+                                    setManualBuntSuccessRate(value);
+                                  }
+                                }}
+                                disabled={buntInputMode !== "manual"}
+                                className={`rounded-xl ${
+                                  buntInputMode !== "manual"
+                                    ? "bg-slate-200 text-slate-900"
+                                    : "bg-white"
+                                }`}
+                              />
                             </div>
+                            <span className="text-sm text-slate-500">％</span>
                           </div>
-                        );
-                      })}
-                    </div>
-                  </CardContent>
-                </Card>
+
+                          <label className="flex items-center gap-1 text-sm whitespace-nowrap">
+                            <input
+                              type="radio"
+                              name="bunt-input-mode"
+                              value="manual"
+                              checked={buntInputMode === "manual"}
+                              onChange={(event) =>
+                                setBuntInputMode(event.target.value as "npb_default" | "manual")
+                              }
+                            />
+                            <span>手動入力</span>
+                          </label>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="rounded-2xl shadow-sm">
+                    <CardHeader className="gap-2">
+                      <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                        <div className="min-w-0">
+                          <div className="flex flex-row gap-3 items-baseline">
+                            <CardTitle className="text-lg">打順</CardTitle>
+                            <CardDescription className="text-sm">
+                              1〜9番の打者を選択します
+                            </CardDescription>
+                          </div>
+                        </div>
+
+                        <div className="w-full md:w-auto">
+                          <Select value={teamFilter} onValueChange={setTeamFilter}>
+                            <SelectTrigger className="w-full rounded-xl bg-white md:w-[270px]">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {TEAM_FILTER_OPTIONS.map((option) => (
+                                <SelectItem key={option.value} value={option.value}>
+                                  <span className="inline-flex items-center gap-2">
+                                    {option.value !== "ALL" && <TeamMark teamName={option.value} />}
+                                    <span>{option.label}</span>
+                                  </span>
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    </CardHeader>
+
+                    <CardContent>
+                      <div className="grid grid-cols-2 gap-3">
+                        {lineup.map((slot, slotIndex) => {
+                          const isCurrentBatter = Number(currentBatterSlot) === slot.slot;
+
+                          return (
+                            <div
+                              key={slot.slot}
+                              className={`space-y-2 rounded-2xl p-2 transition-colors ${
+                                isCurrentBatter
+                                  ? "border border-slate-900 bg-slate-100 shadow-sm"
+                                  : "bg-white"
+                              }`}
+                            >
+                              <div className="flex items-center gap-2">
+                                <Label className="text-sm">{slot.slot}</Label>
+                                <Select
+                                  value={slot.playerKey || undefined}
+                                  onValueChange={(value) => updateLineup(slotIndex, value)}
+                                >
+                                  <SelectTrigger className="rounded-xl bg-white">
+                                    <SelectValue placeholder="選手を選択" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {playerOptionsBySlot[slotIndex].map((player) => (
+                                      <SelectItem key={`${slot.slot}-${player.key}`} value={player.key}>
+                                        <TeamPlayerLabel
+                                          name={player.name}
+                                          teamName={player.teamName}
+                                        />
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                                {isCurrentBatter && (
+                                  <Badge className="rounded-full bg-slate-900 text-white hover:bg-slate-900">
+                                    現
+                                  </Badge>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
               </TabsContent>
 
               <TabsContent value="result" className="space-y-6">
