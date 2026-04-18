@@ -324,7 +324,7 @@ export default function BuntStrategyGui() {
         )}
 
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="order-2 space-y-6 lg:order-1">
+          <div className="order-1 space-y-6 lg:order-1">
             <Card className="rounded-2xl shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg">評価条件</CardTitle>
@@ -535,7 +535,7 @@ export default function BuntStrategyGui() {
             </Card>
           </div>
 
-          <div className="order-1 space-y-6 lg:order-2">
+          <div className="order-2 space-y-6 lg:order-2">
             <Tabs defaultValue="result" className="w-full">
               <TabsList className="grid h-11 w-full grid-cols-2 rounded-2xl">
                 <TabsTrigger value="result">結果</TabsTrigger>
