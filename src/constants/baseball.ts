@@ -155,6 +155,9 @@ export const TEAM_FILTER_OPTIONS = [
   { value: "L", label: "埼玉西武ライオンズ" },
   { value: "E", label: "東北楽天イーグルス" },
   { value: "Bs", label: "オリックス・バファローズ" },
+];
+
+export const TEAM_FILTER_OPTIONS_GENERAL = [
   { value: "-", label: "その他" },
 ];
 

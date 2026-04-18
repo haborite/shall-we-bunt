@@ -18,6 +18,7 @@ import {
   EVENT_JP,
   STATE_OPTIONS,
   TEAM_FILTER_OPTIONS,
+  TEAM_FILTER_OPTIONS_GENERAL,
   NPB_DEFAULT_BUNT_SUCCESS_RATES,
 } from "@/constants/baseball";
 
@@ -431,6 +432,13 @@ export default function BuntStrategyGui() {
                             </span>
                           </SelectItem>
                         ))}
+                        {TEAM_FILTER_OPTIONS_GENERAL.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            <span className="inline-flex items-center gap-2">
+                              <span>{option.label}</span>
+                            </span>
+                          </SelectItem>
+                        ))} 
                       </SelectContent>
                     </Select>
                   </div>
