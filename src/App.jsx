@@ -891,7 +891,7 @@ export default function BuntStrategyGui() {
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
             <h1 className="text-3xl font-semibold tracking-tight">Shall We Bunt?</h1>
-            <p className="mt-2 text-sm text-slate-600">マルコフ過程モデルを用いて、ヒッティングまたはバント時の得点期待値と得点確率を状況別に計算・比較します</p>
+            <p className="mt-2 text-sm text-slate-600">アウトカウント・ランナー状況・打力・打順・バント成功率を考慮して、ヒッティングまたはバント時の得点期待値と得点確率を計算・比較します</p>
           </div>
         </div>
 
@@ -1210,7 +1210,7 @@ function NyTimesQuote() {
                 ──────────
               </p>
               <p>
-                「助かったよ相棒」フリッシュはにこやかに言った。「ところで、名前と勤め先を教えてくれないか。」
+                「助かったよ、相棒」フリッシュはにこやかに言った。「ところで、名前と勤め先を教えてくれないか。」
               </p>
               <p>
                 「なぜだ？」と男が訝しむと、フリッシュは体裁をかなぐり捨てて怒鳴った。
