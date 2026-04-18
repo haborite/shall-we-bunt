@@ -294,7 +294,7 @@ export default function BuntStrategyGui() {
         </div>
 
         {error && (
-          <Alert variant="destructive" className="rounded-2xl">
+          <Alert variant="destructive" className="rounded-3xl">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>エラー</AlertTitle>
             <AlertDescription>{error}</AlertDescription>
