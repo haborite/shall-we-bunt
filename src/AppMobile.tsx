@@ -307,7 +307,7 @@ export default function BuntStrategyGui() {
               <TabsList className="grid h-11 w-full grid-cols-3 rounded-2xl">
                 <TabsTrigger value="condition">条件</TabsTrigger>
                 <TabsTrigger value="result">結果</TabsTrigger>
-                <TabsTrigger value="players">データ</TabsTrigger>
+                <TabsTrigger value="players">成績</TabsTrigger>
               </TabsList>
 
               <TabsContent value="condition" className="space-y-6">
@@ -575,7 +575,7 @@ export default function BuntStrategyGui() {
                                 {index + 1} 番: {String(player.Name)}
                               </div>
 
-                              <div className="grid grid-cols-3 gap-2 text-sm md:grid-cols-4">
+                              <div className="grid grid-cols-4 gap-2 text-sm md:grid-cols-4">
                                 {EVENT_KEYS.map((key) => (
                                   <div key={key} className="rounded-xl bg-slate-50 p-2">
                                     <div className="text-slate-500">
