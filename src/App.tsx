@@ -303,11 +303,12 @@ export default function BuntStrategyGui() {
 
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="order-1 space-y-6 lg:order-1">
+
             <Card className="rounded-2xl shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg">評価条件</CardTitle>
               </CardHeader>
-              <CardContent className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              <CardContent className="grid grid-cols-2 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <div className="space-y-2">
                   <Label>ランナー状況</Label>
                   <Select value={selectedState} onValueChange={setSelectedState}>
