@@ -444,14 +444,14 @@ export default function BuntStrategyGui() {
                     return (
                       <div
                         key={slot.slot}
-                        className={`space-y-2 rounded-2xl border p-3 transition-colors ${
+                        className={`space-y-2 rounded-2xl p-2 transition-colors ${
                           isCurrentBatter
-                            ? "border-slate-900 bg-slate-100 shadow-sm"
+                            ? "border border-slate-900 bg-slate-100 shadow-sm"
                             : "bg-white"
                         }`}
                       >
-                        <div className="flex items-center justify-between gap-2">
-                          <Label className="text-sm">{slot.slot} 番</Label>
+                        <div className="flex items-center justify-between gap-1">
+                          <Label className="text-sm">{slot.slot}</Label>
                           <Select
                             value={slot.playerKey || undefined}
                             onValueChange={(value) => updateLineup(slotIndex, value)}
