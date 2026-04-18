@@ -288,7 +288,7 @@ export default function BuntStrategyGui() {
           <div>
             <h1 className="text-3xl font-semibold tracking-tight">Shall We Bunt?</h1>
             <p className="mt-2 text-sm text-slate-600">
-              具体的な状況ごとのヒッティング or バントの得点期待値と得点確率を計算・比較します
+              バントの有効性を状況別で定量的に比較します
             </p>
           </div>
         </div>
@@ -409,7 +409,7 @@ export default function BuntStrategyGui() {
               <CardHeader className="gap-2">
                 <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                   <div className="min-w-0">
-                    <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-3">
+                    <div className="flex-row items-baseline gap-3">
                       <CardTitle className="text-lg">打順</CardTitle>
                       <CardDescription className="text-sm">
                         1〜9番の打者を選択します
