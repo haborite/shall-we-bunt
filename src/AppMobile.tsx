@@ -450,7 +450,7 @@ export default function BuntStrategyGui() {
                             : "bg-white"
                         }`}
                       >
-                        <div className="flex items-center justify-between gap-1">
+                        <div className="flex items-center gap-2">
                           <Label className="text-sm">{slot.slot}</Label>
                           <Select
                             value={slot.playerKey || undefined}
