@@ -485,7 +485,7 @@ export default function BuntStrategyGui() {
               </CardContent>
             </Card>
 
-            <Card className="rounded-2xl shadow-sm order-2 lg:order-3">
+            <Card className="rounded-2xl shadow-sm order-3 lg:order-2">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-lg">
                   <Upload className="h-5 w-5" />
@@ -524,7 +524,7 @@ export default function BuntStrategyGui() {
             </Card>
           </div>
 
-          <div className="space-y-6 order-3 lg:order-2">
+          <div className="space-y-6 order-2 lg:order-3">
             <Tabs defaultValue="result" className="w-full">
               <TabsList className="grid h-11 w-full grid-cols-2 rounded-2xl">
                 <TabsTrigger value="result">結果</TabsTrigger>
