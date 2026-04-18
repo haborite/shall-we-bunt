@@ -304,7 +304,7 @@ export default function BuntStrategyGui() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6 text-slate-900">
+    <div className="min-h-screen bg-slate-50 px-3 py-4 text-slate-900 sm:px-4 sm:py-6 lg:p-6">
       <div className="mx-auto max-w-7xl space-y-6">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
@@ -324,12 +324,12 @@ export default function BuntStrategyGui() {
         )}
 
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="space-y-6">
+          <div className="order-2 space-y-6 lg:order-1">
             <Card className="rounded-2xl shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg">評価条件</CardTitle>
               </CardHeader>
-              <CardContent className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              <CardContent className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <div className="space-y-2">
                   <Label>ランナー状況</Label>
                   <Select value={selectedState} onValueChange={setSelectedState}>
@@ -432,7 +432,7 @@ export default function BuntStrategyGui() {
                 <CardDescription>1〜9番の打者を選択します</CardDescription>
 
                 <Select value={teamFilter} onValueChange={setTeamFilter}>
-                  <SelectTrigger className="w-[270px] rounded-xl bg-white">
+                  <SelectTrigger className="w-full rounded-xl bg-white sm:w-[270px]">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -449,7 +449,7 @@ export default function BuntStrategyGui() {
               </CardHeader>
 
               <CardContent>
-                <div className="grid gap-3 md:grid-cols-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {lineup.map((slot, slotIndex) => {
                     const isCurrentBatter = Number(currentBatterSlot) === slot.slot;
 
@@ -535,9 +535,9 @@ export default function BuntStrategyGui() {
             </Card>
           </div>
 
-          <div className="space-y-6">
+          <div className="order-1 space-y-6 lg:order-2">
             <Tabs defaultValue="result" className="w-full">
-              <TabsList className="grid w-full grid-cols-2 rounded-2xl">
+              <TabsList className="grid h-11 w-full grid-cols-2 rounded-2xl">
                 <TabsTrigger value="result">結果</TabsTrigger>
                 <TabsTrigger value="players">打者データ</TabsTrigger>
               </TabsList>
@@ -598,7 +598,7 @@ export default function BuntStrategyGui() {
                     <CardTitle className="text-lg">打者ごとの打撃イベント確率</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <ScrollArea className="h-[660px]">
+                    <ScrollArea className="h-[420px] sm:h-[520px] lg:h-[660px]">
                       <div className="space-y-4">
                         {result?.lineupProbs ? (
                           result.lineupProbs.map((player, index) => (
