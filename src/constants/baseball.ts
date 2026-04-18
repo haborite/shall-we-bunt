@@ -139,7 +139,6 @@ export const TEAM_STYLES = {
   L: { badgeClass: "bg-indigo-600", label: "L" },
   E: { badgeClass: "bg-rose-700", label: "E" },
   Bs: { badgeClass: "bg-blue-900", label: "Bs" },
-  B: { badgeClass: "bg-blue-900", label: "B" },
 } as const;
 
 export const TEAM_FILTER_OPTIONS = [
