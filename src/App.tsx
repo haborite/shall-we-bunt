@@ -558,16 +558,29 @@ export default function BuntStrategyGui() {
                       changeRate={result.scoringProbabilityChangeRate}
                     />
 
-                    <div className="grid gap-4 xl:grid-cols-2">
-                      <DistributionBars
-                        title="ヒッティング時の得点分布"
-                        data={result.noBuntDist}
-                      />
-                      <DistributionBars
-                        title="バント時の得点分布"
-                        data={result.buntDist}
-                      />
-                    </div>
+                    <Card className="rounded-2xl shadow-sm">
+                      <CardHeader>
+                        <CardTitle className="text-lg">この回の得点分布</CardTitle>
+                      </CardHeader>
+
+                      <CardContent>
+                        <div className="grid gap-4 xl:grid-cols-2">
+                          <div className="rounded-2xl border bg-white p-4">
+                            <div className="mb-3 text-sm font-medium text-slate-900">
+                              ヒッティング
+                            </div>
+                            <DistributionBars data={result.noBuntDist} />
+                          </div>
+
+                          <div className="rounded-2xl border bg-white p-4">
+                            <div className="mb-3 text-sm font-medium text-slate-900">
+                              バント
+                            </div>
+                            <DistributionBars data={result.buntDist} />
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
 
                     {/* 必要なら有効化 */}
                     {/* <BuntOutcomeSummary outcomes={result.buntOutcomes} /> */}
