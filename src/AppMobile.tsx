@@ -404,92 +404,96 @@ export default function BuntStrategyGui() {
               </CardContent>
             </Card>
 
-            <Card className="rounded-2xl shadow-sm">
-              <CardHeader className="gap-2">
-                <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                  <div className="min-w-0">
-                    <div className="flex flex-row gap-3 items-baseline">
-                      <CardTitle className="text-lg">打順</CardTitle>
-                      <CardDescription className="text-sm">
-                        1〜9番の打者を選択します
-                      </CardDescription>
-                    </div>
-                  </div>
-
-                  <div className="w-full md:w-auto">
-                    <Select value={teamFilter} onValueChange={setTeamFilter}>
-                      <SelectTrigger className="w-full rounded-xl bg-white md:w-[270px]">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {TEAM_FILTER_OPTIONS.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
-                            <span className="inline-flex items-center gap-2">
-                              {option.value !== "ALL" && <TeamMark teamName={option.value} />}
-                              <span>{option.label}</span>
-                            </span>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              </CardHeader>
-
-              <CardContent>
-                <div className="grid grid-cols-2 gap-3">
-                  {lineup.map((slot, slotIndex) => {
-                    const isCurrentBatter = Number(currentBatterSlot) === slot.slot;
-
-                    return (
-                      <div
-                        key={slot.slot}
-                        className={`space-y-2 rounded-2xl p-2 transition-colors ${
-                          isCurrentBatter
-                            ? "border border-slate-900 bg-slate-100 shadow-sm"
-                            : "bg-white"
-                        }`}
-                      >
-                        <div className="flex items-center gap-2">
-                          <Label className="text-sm">{slot.slot}</Label>
-                          <Select
-                            value={slot.playerKey || undefined}
-                            onValueChange={(value) => updateLineup(slotIndex, value)}
-                          >
-                            <SelectTrigger className="rounded-xl bg-white">
-                              <SelectValue placeholder="選手を選択" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {playerOptionsBySlot[slotIndex].map((player) => (
-                                <SelectItem key={`${slot.slot}-${player.key}`} value={player.key}>
-                                  <TeamPlayerLabel
-                                    name={player.name}
-                                    teamName={player.teamName}
-                                  />
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          {isCurrentBatter && (
-                            <Badge className="rounded-full bg-slate-900 text-white hover:bg-slate-900">
-                              現
-                            </Badge>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </CardContent>
-            </Card>
           </div>
 
           <div className="space-y-6">
             <Tabs defaultValue="result" className="w-full">
               <TabsList className="grid h-11 w-full grid-cols-2 rounded-2xl">
+                <TabsTrigger value="condition">条件</TabsTrigger>
                 <TabsTrigger value="result">結果</TabsTrigger>
-                <TabsTrigger value="players">打者データ</TabsTrigger>
+                <TabsTrigger value="players">データ</TabsTrigger>
               </TabsList>
+
+              <TabsContent value="condition" className="space-y-6">
+                <Card className="rounded-2xl shadow-sm">
+                  <CardHeader className="gap-2">
+                    <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                      <div className="min-w-0">
+                        <div className="flex flex-row gap-3 items-baseline">
+                          <CardTitle className="text-lg">打順</CardTitle>
+                          <CardDescription className="text-sm">
+                            1〜9番の打者を選択します
+                          </CardDescription>
+                        </div>
+                      </div>
+
+                      <div className="w-full md:w-auto">
+                        <Select value={teamFilter} onValueChange={setTeamFilter}>
+                          <SelectTrigger className="w-full rounded-xl bg-white md:w-[270px]">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {TEAM_FILTER_OPTIONS.map((option) => (
+                              <SelectItem key={option.value} value={option.value}>
+                                <span className="inline-flex items-center gap-2">
+                                  {option.value !== "ALL" && <TeamMark teamName={option.value} />}
+                                  <span>{option.label}</span>
+                                </span>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </CardHeader>
+
+                  <CardContent>
+                    <div className="grid grid-cols-2 gap-3">
+                      {lineup.map((slot, slotIndex) => {
+                        const isCurrentBatter = Number(currentBatterSlot) === slot.slot;
+
+                        return (
+                          <div
+                            key={slot.slot}
+                            className={`space-y-2 rounded-2xl p-2 transition-colors ${
+                              isCurrentBatter
+                                ? "border border-slate-900 bg-slate-100 shadow-sm"
+                                : "bg-white"
+                            }`}
+                          >
+                            <div className="flex items-center gap-2">
+                              <Label className="text-sm">{slot.slot}</Label>
+                              <Select
+                                value={slot.playerKey || undefined}
+                                onValueChange={(value) => updateLineup(slotIndex, value)}
+                              >
+                                <SelectTrigger className="rounded-xl bg-white">
+                                  <SelectValue placeholder="選手を選択" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {playerOptionsBySlot[slotIndex].map((player) => (
+                                    <SelectItem key={`${slot.slot}-${player.key}`} value={player.key}>
+                                      <TeamPlayerLabel
+                                        name={player.name}
+                                        teamName={player.teamName}
+                                      />
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              {isCurrentBatter && (
+                                <Badge className="rounded-full bg-slate-900 text-white hover:bg-slate-900">
+                                  現
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
 
               <TabsContent value="result" className="space-y-6">
                 {result ? (
