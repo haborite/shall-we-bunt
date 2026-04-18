@@ -1,8 +1,22 @@
 {
   "compilerOptions": {
+    "target": "ESNext",          // 最新のJavaScriptにトランスパイル
+    "module": "ESNext",          // モジュールも最新に
+    "lib": ["DOM", "DOM.Iterable", "ESNext"], // 型定義に必要なライブラリ
+    "allowJs": true,             // JSファイルも扱える
+    "checkJs": false,            // JSの型チェックはしない
+    "jsx": "react-jsx",          // React 17以降の自動import方式
+    "strict": true,              // 厳格な型チェック
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
-    }
-  }
+      "@/*": ["src/*"]           // エイリアス
+    },
+    "ignoreDeprecations": "6.0"
+  },
+  "include": ["src"],             // コンパイル対象
+  "exclude": ["node_modules", "dist"]
 }
