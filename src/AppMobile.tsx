@@ -303,7 +303,7 @@ export default function BuntStrategyGui() {
 
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="space-y-6">
-            <Tabs defaultValue="result" className="w-full">
+            <Tabs defaultValue="condition" className="w-full">
               <TabsList className="grid h-11 w-full grid-cols-3 rounded-2xl">
                 <TabsTrigger value="condition">条件</TabsTrigger>
                 <TabsTrigger value="result">結果</TabsTrigger>
