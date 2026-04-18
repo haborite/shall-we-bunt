@@ -472,7 +472,7 @@ export default function BuntStrategyGui() {
                           </Select>
                           {isCurrentBatter && (
                             <Badge className="rounded-full bg-slate-900 text-white hover:bg-slate-900">
-                              現在の打者
+                              現
                             </Badge>
                           )}
                         </div>
