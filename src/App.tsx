@@ -681,9 +681,9 @@ export default function BuntStrategyGui() {
                 rel="noopener noreferrer"
                 className="text-blue-500 hover:underline"
               >
-                DELTA株式会社が公開している4種類のバント結果分布（大成功・成功・失敗・大失敗）
+                DELTA株式会社が公開している4種類のバント結果分布
               </a>
-              にいくつかの仮定を加えて用いました。
+              （大成功・成功・失敗・大失敗）にいくつかの仮定を加えて用いました。
             </p>
             <p>
               ・「バント成功率」は「意図通りの進塁 + オールセーフ」の合計確率として定義しています。
