@@ -294,7 +294,7 @@ export default function BuntStrategyGui() {
         </div>
 
         {error && (
-          <Alert variant="destructive" className="rounded-3xl">
+          <Alert variant="destructive" className="rounded-2xl">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>エラー</AlertTitle>
             <AlertDescription>{error}</AlertDescription>
@@ -304,7 +304,7 @@ export default function BuntStrategyGui() {
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="space-y-6">
             <Tabs defaultValue="result" className="w-full">
-              <TabsList className="grid h-11 w-full grid-cols-2 rounded-2xl">
+              <TabsList className="grid h-11 w-full grid-cols-3 rounded-2xl">
                 <TabsTrigger value="condition">条件</TabsTrigger>
                 <TabsTrigger value="result">結果</TabsTrigger>
                 <TabsTrigger value="players">データ</TabsTrigger>
