@@ -3,6 +3,16 @@ import { buildPlayerProbabilities, buildBatterTransitionMatrices } from "@/lib/b
 import { solveRunExpectancies, solveScoreProbabilities, makeDistribution } from "@/lib/markov";
 import { getBuntOutcomeOutcomes } from "@/lib/bunt";
 
+type BatterProb = {
+  single: number;
+  double: number;
+  triple: number;
+  home_run: number;
+  walk: number;
+  strikeout: number;
+  field_out: number;
+};
+
 export function analyzeBuntStrategy({
   model,
   lineupPlayers,
@@ -17,7 +27,7 @@ export function analyzeBuntStrategy({
   buntSuccessRateFraction: number;
 }) {
   const lineupProbabilities = lineupPlayers.map(buildPlayerProbabilities);
-  const batterMatrices = buildBatterTransitionMatrices(model, lineupProbabilities);
+  const batterMatrices = buildBatterTransitionMatrices(model, lineupProbabilities as BatterProb[]);
   const runExpectancies = solveRunExpectancies(batterMatrices);
   const scoreProbabilities = solveScoreProbabilities(batterMatrices);
 

@@ -1,35 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { Upload, AlertCircle } from "lucide-react";
-
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "@/components/ui/alert";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 import {
@@ -427,29 +405,39 @@ export default function BuntStrategyGui() {
             </Card>
 
             <Card className="rounded-2xl shadow-sm">
-              <CardHeader>
-                <CardTitle className="text-lg">打順</CardTitle>
-                <CardDescription>1〜9番の打者を選択します</CardDescription>
+              <CardHeader className="gap-2">
+                <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                  <div className="min-w-0">
+                    <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-3">
+                      <CardTitle className="text-lg">打順</CardTitle>
+                      <CardDescription className="text-sm">
+                        1〜9番の打者を選択します
+                      </CardDescription>
+                    </div>
+                  </div>
 
-                <Select value={teamFilter} onValueChange={setTeamFilter}>
-                  <SelectTrigger className="w-full rounded-xl bg-white sm:w-[270px]">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {TEAM_FILTER_OPTIONS.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        <span className="inline-flex items-center gap-2">
-                          {option.value !== "ALL" && <TeamMark teamName={option.value} />}
-                          <span>{option.label}</span>
-                        </span>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  <div className="w-full md:w-auto">
+                    <Select value={teamFilter} onValueChange={setTeamFilter}>
+                      <SelectTrigger className="w-full rounded-xl bg-white md:w-[270px]">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {TEAM_FILTER_OPTIONS.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            <span className="inline-flex items-center gap-2">
+                              {option.value !== "ALL" && <TeamMark teamName={option.value} />}
+                              <span>{option.label}</span>
+                            </span>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
               </CardHeader>
 
               <CardContent>
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
                   {lineup.map((slot, slotIndex) => {
                     const isCurrentBatter = Number(currentBatterSlot) === slot.slot;
 
@@ -462,8 +450,8 @@ export default function BuntStrategyGui() {
                             : "bg-white"
                         }`}
                       >
-                        <div className="flex items-center justify-between">
-                          <Label>{slot.slot} 番</Label>
+                        <div className="flex items-center justify-between gap-2">
+                          <Label className="text-sm">{slot.slot} 番</Label>
                           {isCurrentBatter && (
                             <Badge className="rounded-full bg-slate-900 text-white hover:bg-slate-900">
                               現在の打者
@@ -500,10 +488,10 @@ export default function BuntStrategyGui() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-lg">
                   <Upload className="h-5 w-5" />
-                  入力データ
+                  選手成績データ
                 </CardTitle>
                 <CardDescription>
-                  デフォルト or CSVアップロードで選手成績を切り替え
+                  選手成績CSVをアップロード
                 </CardDescription>
               </CardHeader>
 
