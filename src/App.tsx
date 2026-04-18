@@ -564,7 +564,7 @@ export default function BuntStrategyGui() {
                       </CardHeader>
 
                       <CardContent>
-                        <div className="grid gap-4 xl:grid-cols-2">
+                        <div className="grid gap-4 grid-cols-2">
                           <div className="rounded-2xl border bg-white p-4">
                             <div className="mb-3 text-sm font-medium text-slate-900">
                               ヒッティング
