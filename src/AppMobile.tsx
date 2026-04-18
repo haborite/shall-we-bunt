@@ -282,7 +282,7 @@ export default function BuntStrategyGui() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 px-3 py-4 text-slate-900 sm:px-4 sm:py-6 lg:p-6">
+    <div className="min-h-screen bg-slate-50 px-3 py-4 text-slate-900 sm:px-4 sm:py-6">
       <div className="mx-auto max-w-7xl space-y-6">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
@@ -303,12 +303,11 @@ export default function BuntStrategyGui() {
 
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="space-y-6">
-
             <Card className="rounded-2xl shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg">評価条件</CardTitle>
               </CardHeader>
-              <CardContent className="grid grid-cols-2 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              <CardContent className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>ランナー状況</Label>
                   <Select value={selectedState} onValueChange={setSelectedState}>
@@ -438,7 +437,7 @@ export default function BuntStrategyGui() {
               </CardHeader>
 
               <CardContent>
-                <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
+                <div className="grid grid-cols-2 gap-3">
                   {lineup.map((slot, slotIndex) => {
                     const isCurrentBatter = Number(currentBatterSlot) === slot.slot;
 
@@ -453,72 +452,33 @@ export default function BuntStrategyGui() {
                       >
                         <div className="flex items-center justify-between gap-2">
                           <Label className="text-sm">{slot.slot} 番</Label>
+                          <Select
+                            value={slot.playerKey || undefined}
+                            onValueChange={(value) => updateLineup(slotIndex, value)}
+                          >
+                            <SelectTrigger className="rounded-xl bg-white">
+                              <SelectValue placeholder="選手を選択" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {playerOptionsBySlot[slotIndex].map((player) => (
+                                <SelectItem key={`${slot.slot}-${player.key}`} value={player.key}>
+                                  <TeamPlayerLabel
+                                    name={player.name}
+                                    teamName={player.teamName}
+                                  />
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
                           {isCurrentBatter && (
                             <Badge className="rounded-full bg-slate-900 text-white hover:bg-slate-900">
                               現在の打者
                             </Badge>
                           )}
                         </div>
-
-                        <Select
-                          value={slot.playerKey || undefined}
-                          onValueChange={(value) => updateLineup(slotIndex, value)}
-                        >
-                          <SelectTrigger className="rounded-xl bg-white">
-                            <SelectValue placeholder="選手を選択" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {playerOptionsBySlot[slotIndex].map((player) => (
-                              <SelectItem key={`${slot.slot}-${player.key}`} value={player.key}>
-                                <TeamPlayerLabel
-                                  name={player.name}
-                                  teamName={player.teamName}
-                                />
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
                       </div>
                     );
                   })}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="rounded-2xl shadow-sm">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <Upload className="h-5 w-5" />
-                  選手成績データ
-                </CardTitle>
-                <CardDescription>
-                  選手成績CSVをアップロード
-                </CardDescription>
-              </CardHeader>
-
-              <CardContent className="grid gap-4">
-                <div className="space-y-2">
-                  { /* <Label htmlFor="csvUpload">CSVアップロード</Label> */ }
-                  <Input
-                    id="csvUpload"
-                    type="file"
-                    accept=".csv,text/csv"
-                    onChange={handleCsvUpload}
-                  />
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="text-xs text-slate-500">
-                    {statsFileName || "未読込"}
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={handleResetToDefault}
-                    className="text-xs text-blue-600 hover:underline"
-                  >
-                    デフォルトに戻す
-                  </button>
                 </div>
               </CardContent>
             </Card>
@@ -638,6 +598,46 @@ export default function BuntStrategyGui() {
               </TabsContent>
             </Tabs>
           </div>
+        </div>
+
+        <div className="space-y-6">
+            <Card className="rounded-2xl shadow-sm">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Upload className="h-5 w-5" />
+                  選手成績データ
+                </CardTitle>
+                <CardDescription>
+                  選手成績CSVをアップロード
+                </CardDescription>
+              </CardHeader>
+
+              <CardContent className="grid gap-4">
+                <div className="space-y-2">
+                  { /* <Label htmlFor="csvUpload">CSVアップロード</Label> */ }
+                  <Input
+                    id="csvUpload"
+                    type="file"
+                    accept=".csv,text/csv"
+                    onChange={handleCsvUpload}
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="text-xs text-slate-500">
+                    {statsFileName || "未読込"}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleResetToDefault}
+                    className="text-xs text-blue-600 hover:underline"
+                  >
+                    デフォルトに戻す
+                  </button>
+                </div>
+              </CardContent>
+            </Card>
         </div>
 
         <Card className="rounded-2xl shadow-sm">
