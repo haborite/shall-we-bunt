@@ -462,7 +462,7 @@ export default function BuntStrategyGui() {
                               <div className="flex items-center gap-2">
                                 <Label className="text-sm">{slot.slot}</Label>
                                 <Select
-                                  value={slot.playerKey || undefined}
+                                  value={slot.playerKey ?? ""}
                                   onValueChange={(value) => updateLineup(slotIndex, value)}
                                 >
                                   <SelectTrigger className="rounded-xl bg-white">

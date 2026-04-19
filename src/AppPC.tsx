@@ -461,7 +461,7 @@ export default function BuntStrategyGui() {
                         </div>
 
                         <Select
-                          value={slot.playerKey || undefined}
+                          value={slot.playerKey ?? ""}
                           onValueChange={(value) => updateLineup(slotIndex, value)}
                         >
                           <SelectTrigger className="rounded-xl bg-white">
